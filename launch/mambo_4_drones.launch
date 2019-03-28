@@ -1,0 +1,31 @@
+<launch>
+	<arg name="bt_addr_1" default="e0:14:60:5c:3d:c7"/>
+	<arg name="bt_addr_2" default="e0:14:7d:11:3d:c7"/>
+	<arg name="bt_addr_3" default="e0:14:4f:ea:3d:C7"/>
+	<arg name="bt_addr_4" default="e0:14:8d:47:3d:c7"/>
+	<arg name="ns_1" default="mambo_1"/>
+	<arg name="ns_2" default="mambo_2"/>
+	<arg name="ns_3" default="mambo_3"/>
+	<arg name="ns_4" default="mambo_4"/>
+
+	<group ns="$(arg ns_1)">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo" output="screen">
+			<param name="bt" value="$(arg bt_addr_1)"/>
+		</node>
+	</group>
+	<group ns="$(arg ns_2)">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo" output="screen">
+			<param name="bt" value="$(arg bt_addr_2)"/>
+		</node>
+	</group>
+	<group ns="$(arg ns_3)">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo" output="screen">
+			<param name="bt" value="$(arg bt_addr_3)"/>
+		</node>
+	</group>
+	<group ns="$(arg ns_4)">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo" output="screen">
+			<param name="bt" value="$(arg bt_addr_4)"/>
+		</node>
+	</group>
+</launch>

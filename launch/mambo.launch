@@ -1,0 +1,11 @@
+<launch>
+	<arg name="bt_addr" default="e0:14:60:5c:3d:c7"/>
+	<arg name="namespace" default="mambo"/>
+
+	<group ns="mambo">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo" output="screen">
+			<param name="bt" value="$(arg bt_addr)"/>
+
+		</node>
+	</group>
+</launch>
