@@ -24,7 +24,7 @@ This driver was created to be used along with Dr. Amy McGovern's [pyparrot](http
 ### Installation 
 + Use the following command in your preferred catkin workspace 
 ```
-git clone https://github.com/TOTON95/ros_pyparrot.git
+$ git clone https://github.com/TOTON95/ros_pyparrot.git
 ```
 + Build it
 ```
