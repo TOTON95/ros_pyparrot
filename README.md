@@ -44,4 +44,4 @@ $ roslaunch ros_pyparrot <name_of_desired_launch_file>
 
 ## Disclaimer 
 
-### Use the driver at your own risk, the creators of this code do NOT are responsible in any way in case of accidents or damage, against users and/or objects.
+### Use the driver at your own risk, the creators of this code are NOT responsible in any way in case of accidents or damage, against users and/or objects.
