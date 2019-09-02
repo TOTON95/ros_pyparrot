@@ -90,6 +90,7 @@ def init():
     s_land = rospy.Subscriber('land',Empty,cb_land)
     s_cannon = rospy.Subscriber('cannon',Empty,cb_shoot_cannon)
     s_auto_tko = rospy.Subscriber('auto_tko',Empty,cb_auto_take_off)
+    p_ready = rospy.Publisher('ready',String,queue_size=30)
     mambo = Mambo(mamboAdd,use_wifi=wifi)
     success = mambo.connect(retries)
     if(success):
@@ -99,8 +100,10 @@ def init():
         mambo.flat_trim()
         rate = rospy.Rate(100)
         while not rospy.is_shutdown():
+
             if tko == True:
-                mambo.safe_takeoff(3)
+                mambo.safe_takeoff(2)
+                p_ready.publish("ok")            
                 tko = False
 
             if land == True:
@@ -115,7 +118,11 @@ def init():
                 mambo.turn_on_auto_takeoff()
                 auto_tko = False
 
-            mambo.fly_direct(roll = (-linY * 100), pitch = (linX*100),yaw = (-Hdg *100), vertical_movement = (Alt*100), duration=0.001)
+            mambo.fly_direct(roll = (-linY * 100), pitch = (linX*100),yaw = (-Hdg *100), vertical_movement = (Alt*100), duration=0.0001)
+            #linY = 0
+            #linX = 0
+            #Hdg = 0
+            #Alt = 0
 
             rate.sleep()
 
