@@ -13,22 +13,22 @@
 	<arg name="ns_6" default="mambo_6"/>
 
 	<!--group ns="$(arg ns_1)"-->
-		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_1" output="screen">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_1">
 			<param name="bt" value="$(arg bt_addr_1)"/>
 		</node>
 	<!--/group-->
 	<!--group ns="$(arg ns_1)"-->
-		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_2" output="screen">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_2">
 			<param name="bt" value="$(arg bt_addr_2)"/>
 		</node>
 	<!--/group-->
 	<!--group ns="$(arg ns_1)"-->
-		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_3" output="screen">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_3">
 			<param name="bt" value="$(arg bt_addr_3)"/>
 		</node>
 	<!--/group-->
 	<!--group ns="$(arg ns_1)"-->
-		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_4" output="screen">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_4">
 			<param name="bt" value="$(arg bt_addr_4)"/>
 		</node>
 	<!--/group-->
@@ -38,7 +38,7 @@
 		</node>
 	<!--/group-->
 	<!--group ns="$(arg ns_1)"-->
-		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_6" output="screen">
+		<node pkg="ros_pyparrot" type="mambo.py" name="mambo_6">
 			<param name="bt" value="$(arg bt_addr_6)"/>
 		</node>
 	<!--/group-->
