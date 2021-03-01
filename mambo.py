@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.6
 import rospy
+import math
 from std_msgs.msg import Empty, String, UInt8
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
@@ -11,7 +12,7 @@ import _thread
 #Variable that will store the parameters of the mambo drone
 mamboAdd = "e0:14:60:5c:3d:c7"
 wifi = False
-retries = 12 
+retries = 12
 
 #The mambo object
 mambo = Mambo("",use_wifi=wifi)
@@ -28,8 +29,8 @@ need_to_change_mode = False
 need_to_toggle_mode = False
 p_mode = 0
 linX = 0
-linY = 0 
-Alt = 0 
+linY = 0
+Alt = 0
 Hdg = 0
 
 #Preffered piloting mode function
@@ -43,9 +44,11 @@ def pilotmode(Mambo,s_mode):
     else:
         return
 
-    command_tuple = Mambo.command_parser.get_command_tuple("minidrone", "PilotingSettings","PreferredPilotingMode")
+    #command_tuple = Mambo.command_parser.get_command_tuple("minidrone", "PilotingSettings","PreferredPilotingMode")
+    (command_tuple, enum_tuple) = Mambo.command_parser.get_command_tuple_with_enum("minidrone", "PilotingSettings","PreferredPilotingMode",mode)
 
-    return Mambo.drone_connection.send_enum_command_packet_ack(command_tuple,s_mode.data);
+    #return Mambo.drone_connection.send_enum_command_packet_ack(command_tuple,s_mode.data);
+    return Mambo.drone_connection.send_enum_command_packet_ack(command_tuple,enum_tuple);
 
 def togglemode(Mambo):
     command_tuple = Mambo.command_parser.get_command_tuple("minidrone", "Piloting","TogglePilotingMode")
@@ -64,7 +67,7 @@ def cb_toggle_mode(data):
     rospy.loginfo("\n" + rospy.get_name() + " Toggling Mode...\n")
     need_to_toggle_mode = True
 
-#Sends the spin function to another thread 
+#Sends the spin function to another thread
 def spin_th(name,envi):
     rospy.spin()
 
@@ -86,11 +89,19 @@ def cb_cmd_vel(data):
     global linY
     global Alt
     global Hdg
-    #rospy.loginfo(rospy.get_name() + "\n Linear_X: %s Linear_Y: %s Linear_Z: %s Angular_Z: %s",data.linear.x,data.linear.y,data.linear.z,data.angular.z)
+    rospy.loginfo(rospy.get_name() + "\n Linear_X: %s Linear_Y: %s Linear_Z: %s Angular_Z: %s",data.linear.x,data.linear.y,data.linear.z,data.angular.z)
     linX = data.linear.x
     linY = data.linear.y
     Alt = data.linear.z
     Hdg = data.angular.z
+
+    #Forced perturbation
+#    linX += 0.3
+
+#    if(linX < 0):
+#	    linX -= 0.1
+#    if(linY < 0):
+#	    linX += 0.18
 
 def cb_shoot_cannon(data):
     global cannon
@@ -101,6 +112,14 @@ def cb_auto_take_off(data):
     global auto_tko
     rospy.loginfo("\n Auto TKO activated \n")
     auto_tko = True
+
+def sat(value, max_value):
+    if(value > max_value):
+	    value = max_value
+    if(value < -max_value):
+	    value = -max_value
+    return value
+
 
 #Initialization function
 def init():
@@ -119,7 +138,7 @@ def init():
     mamboAdd = rospy.get_param('~bt',str("e0:14:60:5c:3d:c7"))
     wifi = rospy.get_param('~mambo_wifi',False)
     retries = rospy.get_param('~mambo_retries',3)
-    rospy.loginfo("\n" + rospy.get_name() + "\nParameters:\n" + mamboAdd + "\n" + str(wifi) + "\n" + str(retries) +"\n") 
+    rospy.loginfo("\n" + rospy.get_name() + "\nParameters:\n" + mamboAdd + "\n" + str(wifi) + "\n" + str(retries) +"\n")
     s_cmd_vel = rospy.Subscriber('cmd_vel',Twist,cb_cmd_vel)
     s_take_off = rospy.Subscriber('take_off',Empty,cb_take_off)
     s_land = rospy.Subscriber('land',Empty,cb_land)
@@ -140,7 +159,7 @@ def init():
 
             if tko == True:
                 mambo.safe_takeoff(2)
-                p_ready.publish("ok")            
+                p_ready.publish("ok")
                 tko = False
 
             if land == True:
@@ -168,17 +187,26 @@ def init():
                 else:
                     print("Failed activating preferred mode")
                 need_to_toggle_mode = False
-                
 
+            r_y = round(linY,2)
+            p_x = round(linX,2)
+            v_z = round(Alt,2)
+            y_z = round(Hdg,2)
 
-
-            mambo.fly_direct(roll = (-linY * 100), pitch = (linX*100),yaw = (-Hdg *100), vertical_movement = (Alt*100), duration=0.0001)
-            #linY = 0
-            #linX = 0
-            #Hdg = 0
-            #Alt = 0
+            r_y = sat(r_y, 0.98)
+            p_x = sat(p_x, 0.98)
+            v_z = sat(v_z, 0.98)
+            y_z = sat(y_z, 0.98)
+            mambo.fly_direct(roll = (-r_y * 100), pitch = (p_x*100),yaw = (-y_z *100), vertical_movement = (v_z*100), duration=0.01)
+           # linY = 0
+           # linX = 0
+           # Hdg = 0
+           # Alt = 0
 
             rate.sleep()
+
+        #mambo.disconnect()
+
 
 #Main function
 if __name__=='__main__':

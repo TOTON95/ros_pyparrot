@@ -45,3 +45,23 @@ $ roslaunch ros_pyparrot <name_of_desired_launch_file>
 ## Disclaimer 
 
 ### Use the driver at your own risk, the creators of this code are NOT responsible in any way in case of accidents or damage, against users and/or objects.
+
+## Credit
+
+If you find this code useful, please consider to cite us as:
+
+BibTeX:
+
+```BibTeX
+@INPROCEEDINGS{9024528,
+  author={I. {Rubio Scola} and G. A. {Guijarro Reyes} and L. R. {Garcia Carrillo} and J. {Hespanha} and J. {Xie}},
+  booktitle={2019 IEEE Globecom Workshops (GC Wkshps)}, 
+  title={Translational Model Identification and Robust Control for the Parrot Mambo UAS Multicopter}, 
+  year={2019},
+  volume={},
+  number={},
+  pages={1-6},
+  doi={10.1109/GCWkshps45667.2019.9024528}}
+
+```
+
