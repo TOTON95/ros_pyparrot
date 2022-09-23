@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 import rospy
 import math
 from std_msgs.msg import Empty, String, UInt8
